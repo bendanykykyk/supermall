@@ -1,6 +1,6 @@
 <template>
   <div>
-    <tabbar>
+    <tabbar class="tab-bar">
       <tabBar-item path="/home" textColor="pink">
         <template v-slot:item-img-active>
           <img src="~assets/img/tabbar/home.svg" alt="" />
@@ -64,4 +64,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.tab-bar {
+  z-index: 10;
+}
+</style>
