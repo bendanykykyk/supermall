@@ -6,24 +6,19 @@
         购物街
       </template>
     </nav-bar>
-
     <!--轮播图-->
     <!-- <home-slide-show :banners="banners"></home-slide-show> -->
     <div class="alterSlideShow"></div>
-
     <!--推荐-->
     <home-recommend :recommends="recommends" />
-
     <!--特性图-->
     <home-feature></home-feature>
-
     <!--控制条-->
     <tab-control
       class="tab-control"
       :titles="['流行', '新款', '精选']"
       @title-click="titleClick"
     />
-
     <!--商品列表-->
     <goods-list :goodsList="showGoods"></goods-list>
 
@@ -112,7 +107,6 @@ export default {
     this.getMultiData();
 
     this.getHomeGoods("pop");
-
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
@@ -120,6 +114,8 @@ export default {
     /**
      * 事件监听的方法
      */
+
+    //根据下标值替换currentType的值
     titleClick(index) {
       console.log(index);
       switch (index) {
@@ -161,7 +157,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #home {
   padding-top: 44px;
 }

@@ -31,7 +31,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .home-slide {
   background: wheat;
   height: 100px;

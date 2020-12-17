@@ -1,17 +1,16 @@
 <template>
-    <div class="tabBar">
-      <slot></slot>
-    </div>
+  <div class="tabBar">
+    <slot></slot>
+  </div>
 </template>
-
 
 <script>
 export default {
-  name: "Tabbar",
+  name: "Tabbar"
 };
 </script>
 
-<style>
+<style scoped>
 .tabBar {
   background: #f6f6f6;
   height: 3.125rem;
