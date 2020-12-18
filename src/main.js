@@ -4,8 +4,14 @@ import App from "./App.vue";
 
 import router from "./router";
 Vue.config.productionTip = false;
-
+Vue.prototype.$bus = new Vue();
 new Vue({
-  render: h => h(App),
+  render: h => h(App), //生成VNode节点
   router
-}).$mount("#app");
+}).$mount("#app"); //渲染成真实的DOM组件，挂在到根节点上
+
+function add() {
+  return function() {
+    console.log(123);
+  };
+}

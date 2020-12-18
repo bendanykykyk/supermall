@@ -7,6 +7,13 @@
       </template>
     </nav-bar>
 
+    <tab-control
+      class="tab-control2"
+      :titles="['流行', '新款', '精选']"
+      @title-click="titleClick"
+      v-show="showTabControl"
+      ref="tabControl2"
+    />
     <scroll
       class="content"
       ref="scroll"
@@ -16,7 +23,10 @@
       @loadMore="getHomeGoods(currentType)"
     >
       <!--轮播图-->
-      <div class="alterSlideShow"></div>
+      <home-swiper
+        :banners="banners"
+        @swiperImageLoad="swiperImageLoad"
+      ></home-swiper>
       <!--推荐-->
       <home-recommend :recommends="recommends" />
       <!--特性图-->
@@ -26,6 +36,7 @@
         class="tab-control"
         :titles="['流行', '新款', '精选']"
         @title-click="titleClick"
+        ref="tabControl1"
       />
       <!--商品列表-->
       <goods-list :goodsList="showGoods"></goods-list>
@@ -40,25 +51,28 @@
 
 <script>
 //* Home子组件导入
-//todo:轮播图开发
-// import HomeSlideShow from "./homeChild/HomeSlideShow";
 import HomeRecommend from "./homeChild/HomeRecommend";
 import HomeFeature from "./homeChild/HomeFeature";
+import HomeSwiper from "./homeChild/HomeSwiper";
 //* 公共组件导入
 import NavBar from "components/common/navbar/NavBar";
+//todo:轮播图开发
+
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
 import BackTop from "components/content/backTop/BackTop";
 //* 网络请求导入
 import { getMultiData, getHomeGoods } from "network/home";
+//* 公共函数导入
+import { debounce } from "common/utils";
 export default {
   name: "Home",
   components: {
-    // HomeSlideShow,
     HomeRecommend,
     HomeFeature,
     NavBar,
+    HomeSwiper,
     TabControl,
     GoodsList,
     Scroll,
@@ -76,7 +90,9 @@ export default {
         sell: { page: 0, list: [] }
       },
       currentType: "pop",
-      position: 0
+      position: 0,
+      tabControlOffsetTop: 0,
+      saveY: 0
     };
   },
   created() {
@@ -86,6 +102,20 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
+  mounted() {
+    const refresh = debounce(this.$refs.scroll.refresh, 200);
+    this.$bus.$on("loadImageRefresh", () => {
+      refresh();
+    });
+  },
+  activated() {
+    this.$refs.scroll && this.$refs.scroll.scrollTo(0, this.saveY, 0);
+    this.$refs.scroll.refresh();
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.getY();
+    console.log(this.saveY);
+  },
   methods: {
     /**
      * 事件监听的方法
@@ -93,7 +123,6 @@ export default {
 
     //根据下标值替换currentType的值
     titleClick(index) {
-      console.log(index);
       switch (index) {
         case 0:
           this.currentType = "pop";
@@ -105,13 +134,19 @@ export default {
           this.currentType = "sell";
           break;
       }
+      this.$refs.tabControl1.currentIndex = index;
+      this.$refs.tabControl2.currentIndex = index;
     },
     backTopClick() {
-      this.$refs.scroll.scrollMethod(0, 0, 300);
+      this.$refs.scroll.scrollTo(0, 0, 300);
     },
     scrollContent(position) {
       this.position = position;
     },
+    swiperImageLoad() {
+      this.tabControlOffsetTop = this.$refs.tabControl1.$el.offsetTop;
+    },
+
     /**
      * 网络请求相关的方法
      */
@@ -133,12 +168,16 @@ export default {
       });
     }
   },
+
   computed: {
     showGoods() {
       return this.goods[this.currentType].list;
     },
     showBackTop() {
       return Math.abs(this.position.y) >= 1000;
+    },
+    showTabControl() {
+      return Math.abs(this.position.y) >= this.tabControlOffsetTop;
     }
   }
 };
@@ -146,27 +185,29 @@ export default {
 
 <style scoped>
 #home {
-  padding-top: 44px;
+  /* padding-top: 44px; */
   position: relative;
   height: 100vh;
 }
 .nav-bar {
   background: var(--color-tint);
   color: white;
-  position: fixed;
+
   width: 100%;
-  top: 0;
-  left: 0;
 }
-.alterSlideShow {
+.tab-control2 {
+  position: relative;
+  z-index: 9;
+}
+/* .alterSlideShow {
   height: 120px;
   background: wheat;
-}
-
+} */
+/*
 .tab-control {
   position: sticky;
   top: 44px;
-}
+} */
 .content {
   overflow: hidden;
 

@@ -24,6 +24,7 @@
           <div>分类</div>
         </template>
       </tabBar-item>
+
       <tabBar-item path="/cart" textColor="pink">
         <template v-slot:item-img-active>
           <img src="~assets/img/tabbar/shopcart.svg" alt="" />

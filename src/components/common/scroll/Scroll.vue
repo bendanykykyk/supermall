@@ -27,32 +27,39 @@ export default {
     };
   },
   methods: {
-    scrollMethod(x, y, time = 300) {
-      this.scroll.scrollTo(x, y, time);
+    scrollTo(x, y, time = 300) {
+      //先判断是否有值，没值就不执行了
+      this.scroll && this.scroll.scrollTo(x, y, time);
     },
     finishPullUp() {
-      this.scroll.finishPullUp();
+      this.scroll && this.scroll.finishPullUp();
+    },
+    refresh() {
+      this.scroll && this.scroll.refresh();
+    },
+    getY() {
+      return this.scroll ? this.scroll.y : 0;
     }
   },
   mounted() {
     //BScroll的实例化要放在mounted里面，要保证在dom节点挂载后再实例化
-    this.$nextTick(() => {
-      this.scroll = new BScroll(this.$refs.wrapper, {
-        click: true,
-        observeDOM: true, //这个是处理图片没加载完，高度计算错误的bug的；如果还不行就需要调refresh方法
-        probeType: this.probeType,
-        pullUpLoad: this.pullUpLoad
-      });
-
-      this.scroll.on("scroll", position => {
-        this.$emit("scroll", position);
-      });
-
-      this.scroll.on("pullingUp", () => {
-        this.$emit("loadMore");
-      });
-      // this.scroll.refresh();
+    // this.$nextTick(() => {
+    this.scroll = new BScroll(this.$refs.wrapper, {
+      click: true,
+      // observeDOM: true, //这个是处理图片没加载完，高度计算错误的bug的；如果还不行就需要调refresh方法
+      probeType: this.probeType,
+      pullUpLoad: this.pullUpLoad
     });
+
+    this.scroll.on("scroll", position => {
+      this.$emit("scroll", position);
+    });
+
+    this.scroll.on("pullingUp", () => {
+      this.$emit("loadMore");
+    });
+    // this.scroll.refresh();
+    // });
   }
 };
 </script>
