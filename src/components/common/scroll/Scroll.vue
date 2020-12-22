@@ -46,18 +46,22 @@ export default {
     // this.$nextTick(() => {
     this.scroll = new BScroll(this.$refs.wrapper, {
       click: true,
-      // observeDOM: true, //这个是处理图片没加载完，高度计算错误的bug的；如果还不行就需要调refresh方法
+      observeDOM: true, //这个是处理图片没加载完，高度计算错误的bug的；如果还不行就需要调refresh方法
       probeType: this.probeType,
       pullUpLoad: this.pullUpLoad
     });
 
-    this.scroll.on("scroll", position => {
-      this.$emit("scroll", position);
-    });
+    if (this.probeType === 2 || this.probeType === 3) {
+      this.scroll.on("scroll", position => {
+        this.$emit("scroll", position);
+      });
+    }
+    if (this.pullUpLoad) {
+      this.scroll.on("pullingUp", () => {
+        this.$emit("loadMore");
+      });
+    }
 
-    this.scroll.on("pullingUp", () => {
-      this.$emit("loadMore");
-    });
     // this.scroll.refresh();
     // });
   }

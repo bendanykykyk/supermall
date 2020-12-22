@@ -1,19 +1,19 @@
 <template>
   <div>
-    <swiper>
-      <swiper-item v-for="(item, index) in banners" :key="index">
+    <slider :autoplay="3000" class="slider">
+      <slider-item v-for="(item, index) in banners" :key="index">
         <a :href="item.link">
           <img :src="item.image" alt="" @load="loadImage" />
         </a>
-      </swiper-item>
-    </swiper>
+      </slider-item>
+    </slider>
   </div>
 </template>
 
 <script>
-import { Swiper, SwiperItem } from "components/common/swiper";
+import { Slider, SliderItem } from "components/common/slider";
 export default {
-  name: "HomeSwiper",
+  name: "HomeSlider",
   props: {
     banners: {
       type: Array,
@@ -36,8 +36,8 @@ export default {
     }
   },
   components: {
-    Swiper,
-    SwiperItem
+    Slider,
+    SliderItem
   }
 };
 </script>

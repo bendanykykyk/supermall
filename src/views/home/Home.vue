@@ -23,10 +23,10 @@
       @loadMore="getHomeGoods(currentType)"
     >
       <!--轮播图-->
-      <home-swiper
+      <home-slider
         :banners="banners"
         @swiperImageLoad="swiperImageLoad"
-      ></home-swiper>
+      ></home-slider>
       <!--推荐-->
       <home-recommend :recommends="recommends" />
       <!--特性图-->
@@ -53,7 +53,7 @@
 //* Home子组件导入
 import HomeRecommend from "./homeChild/HomeRecommend";
 import HomeFeature from "./homeChild/HomeFeature";
-import HomeSwiper from "./homeChild/HomeSwiper";
+import HomeSlider from "./homeChild/HomeSlider";
 //* 公共组件导入
 import NavBar from "components/common/navbar/NavBar";
 //todo:轮播图开发
@@ -72,7 +72,7 @@ export default {
     HomeRecommend,
     HomeFeature,
     NavBar,
-    HomeSwiper,
+    HomeSlider,
     TabControl,
     GoodsList,
     Scroll,
@@ -136,6 +136,10 @@ export default {
       }
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
+      this.backToTabControl(0, -this.tabControlOffsetTop, 300);
+    },
+    backToTabControl(x, y, time) {
+      this.$refs.scroll.scrollTo(x, y, time);
     },
     backTopClick() {
       this.$refs.scroll.scrollTo(0, 0, 300);

@@ -9,9 +9,3 @@ new Vue({
   render: h => h(App), //生成VNode节点
   router
 }).$mount("#app"); //渲染成真实的DOM组件，挂在到根节点上
-
-function add() {
-  return function() {
-    console.log(123);
-  };
-}

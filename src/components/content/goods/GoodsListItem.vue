@@ -1,6 +1,10 @@
 <template>
-  <div class="goods-list-item">
-    <img :src="goodsItem.show.img" alt="" @load="loadImageRefresh" />
+  <div class="goods-list-item" @click="itemClick">
+    <img
+      :src="goodsItem.image || goodsItem.show.img"
+      alt=""
+      @load="loadImageRefresh"
+    />
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
@@ -22,7 +26,31 @@ export default {
   },
   methods: {
     loadImageRefresh() {
-      this.$bus.$emit("loadImageRefresh");
+      const path = this.$route.path;
+      console.log(String(path).indexOf("/home"));
+      //根据所处的路径，来使用事件总线 发射事件
+      if (String(path).indexOf("/home") !== -1) {
+        this.$bus.$emit("loadImageRefresh");
+      } else if (path.indexOf("/detail") !== -1) {
+        this.$bus.$emit("detailLoadImageRefresh");
+      }
+    },
+    itemClick() {
+      const itemId = this.goodsItem.iid || this.goodsItem.item_id;
+      // console.log(itemId);
+      // const path = this.$route.path;
+      // console.log(String(path).indexOf("/home"));
+      // //根据所处的路径，来使用事件总线 发射事件
+      // if (path.indexOf("/detail") !== -1) {
+      //   this.$bus.$emit("sendGoodsDetail", "1m7s9c4");
+      // }
+
+      this.$router.push({
+        path: "/detail",
+        query: {
+          iid: itemId
+        }
+      });
     }
   }
 };
