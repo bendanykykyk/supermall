@@ -24,8 +24,8 @@
       <detail-comment :rate="rate" ref="detailComment"></detail-comment>
       <goods-list :goodsList="recommends" ref="goodsList"> </goods-list>
     </scroll>
-    <detail-bottom-bar></detail-bottom-bar>
-    <back-top></back-top>
+    <detail-bottom-bar @click.native="addToCart"></detail-bottom-bar>
+    <back-top @click.native="backTopClick" v-show="showBackTop"></back-top>
   </div>
 </template>
 
@@ -42,14 +42,15 @@ import DetailBottomBar from "./detailChild/DetailBottomBar";
 //* 引入公共组件
 import Scroll from "components/common/scroll/Scroll";
 import { GoodsList, GoodsListItem } from "components/content/goods";
-import BackTop from "components/content/backTop/BackTop";
+
 //* 网络请求
 import { getGoodsDetail, getRecommends } from "network/detail";
 //*整合的对象
 import { GoodsInfo, ShopInfo, itemParam } from "network/detail";
 //* 公共函数导入
 import { debounce } from "common/utils";
-
+//* 混入导入
+import { backTopMixin } from "common/mixin";
 export default {
   name: "Detail",
   data() {
@@ -69,6 +70,7 @@ export default {
       getThemeTopY: null
     };
   },
+  mixins: [backTopMixin],
   components: {
     DetailNavBar,
     DetailSlider,
@@ -80,8 +82,7 @@ export default {
     DetailBottomBar,
     Scroll,
     GoodsList,
-    GoodsListItem,
-    BackTop
+    GoodsListItem
   },
   created() {
     //1.存储路径iid值
@@ -144,6 +145,10 @@ export default {
       this.$refs.scroll.scrollTo(0, -this.itemOffsetTop[index], 300);
     },
     scroll(position) {
+      //把position保存记录当前位置
+      this.position = position;
+
+      //判断滚动位置，高亮navBar
       const AbsPosition = -position.y;
       console.log(Math.ceil(AbsPosition));
       if (
@@ -161,8 +166,19 @@ export default {
       } else {
         this.$refs.detailNavBar.currentIndex = 0;
       }
+    },
+    addToCart() {
+      const goods = {};
+      goods.iid = this.iid;
+      goods.desc = this.detailInfo.desc;
+      goods.detailImage = this.detailInfo.detailImage[0].list[0];
+      goods.price = this.goodsInfo.lowNowPrice;
+      goods.title = this.goodsInfo.title;
+      console.log(goods);
+      this.$store.commit("addCart", goods);
     }
-  }
+  },
+  computed: {}
 };
 </script>
 

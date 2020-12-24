@@ -56,16 +56,17 @@ import HomeFeature from "./homeChild/HomeFeature";
 import HomeSlider from "./homeChild/HomeSlider";
 //* 公共组件导入
 import NavBar from "components/common/navbar/NavBar";
-//todo:轮播图开发
 
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
-import BackTop from "components/content/backTop/BackTop";
+
 //* 网络请求导入
 import { getMultiData, getHomeGoods } from "network/home";
 //* 公共函数导入
 import { debounce } from "common/utils";
+//* 混入导入
+import { backTopMixin } from "common/mixin";
 export default {
   name: "Home",
   components: {
@@ -75,9 +76,9 @@ export default {
     HomeSlider,
     TabControl,
     GoodsList,
-    Scroll,
-    BackTop
+    Scroll
   },
+  mixins: [backTopMixin],
   data() {
     return {
       banners: [],
@@ -90,7 +91,7 @@ export default {
         sell: { page: 0, list: [] }
       },
       currentType: "pop",
-      position: 0,
+
       tabControlOffsetTop: 0,
       saveY: 0
     };
@@ -144,9 +145,7 @@ export default {
     backTopClick() {
       this.$refs.scroll.scrollTo(0, 0, 300);
     },
-    scrollContent(position) {
-      this.position = position;
-    },
+
     swiperImageLoad() {
       this.tabControlOffsetTop = this.$refs.tabControl1.$el.offsetTop;
     },
@@ -177,9 +176,7 @@ export default {
     showGoods() {
       return this.goods[this.currentType].list;
     },
-    showBackTop() {
-      return Math.abs(this.position.y) >= 1000;
-    },
+
     showTabControl() {
       return Math.abs(this.position.y) >= this.tabControlOffsetTop;
     }
