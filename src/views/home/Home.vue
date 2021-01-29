@@ -6,7 +6,6 @@
         购物街
       </template>
     </nav-bar>
-
     <tab-control
       class="tab-control2"
       :titles="['流行', '新款', '精选']"
@@ -67,6 +66,10 @@ import { getMultiData, getHomeGoods } from "network/home";
 import { debounce } from "common/utils";
 //* 混入导入
 import { backTopMixin } from "common/mixin";
+
+//vant
+import { Toast } from "vant";
+
 export default {
   name: "Home",
   components: {
@@ -76,7 +79,8 @@ export default {
     HomeSlider,
     TabControl,
     GoodsList,
-    Scroll
+    Scroll,
+    [Toast.name]: Toast
   },
   mixins: [backTopMixin],
   data() {
@@ -110,12 +114,11 @@ export default {
     });
   },
   activated() {
-    this.$refs.scroll && this.$refs.scroll.scrollTo(0, this.saveY, 0);
     this.$refs.scroll.refresh();
+    this.$refs.scroll && this.$refs.scroll.scrollTo(0, this.saveY, 0);
   },
   deactivated() {
     this.saveY = this.$refs.scroll.getY();
-    console.log(this.saveY);
   },
   methods: {
     /**
@@ -133,6 +136,7 @@ export default {
           break;
         case 2:
           this.currentType = "sell";
+
           break;
       }
       this.$refs.tabControl1.currentIndex = index;
@@ -159,6 +163,7 @@ export default {
         this.dKeywords = res.data.dKeyword.list;
         this.keywords = res.data.keywords.list;
         this.recommends = res.data.recommend.list;
+        // toast.clear();
       });
     },
     getHomeGoods(type) {

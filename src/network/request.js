@@ -10,16 +10,22 @@ export function request(config) {
   // 请求拦截器
   instance.interceptors.request.use(
     config => {
+      //*测试接口用
+      console.log(`url:${config.url} method:${config.method}`);
+      console.log("请求参数:", config.params || config.data);
       //拦截后需要将拦截下来的请求数据返回发送
       return config;
     },
     err => {}
   );
 
-  // 相应拦截器
+  // 响应拦截器
   instance.interceptors.response.use(
     res => {
       // 拦截后需要将拦截下来处理成的结果返回
+      console.log("相应结果:", res.data);
+      console.log("--------------------");
+
       return res.data;
     },
     err => {

@@ -1,7 +1,7 @@
 <template>
   <div class="goods-list-item" @click="itemClick">
     <img
-      :src="goodsItem.image || goodsItem.show.img"
+      v-lazy="goodsItem.image || goodsItem.show.img"
       alt=""
       @load="loadImageRefresh"
     />

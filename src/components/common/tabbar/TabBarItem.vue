@@ -47,8 +47,8 @@ export default {
   flex: 1;
 }
 .tabBar-item img {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 25px;
+  height: 25px;
 }
 /* .active {
   color: red;

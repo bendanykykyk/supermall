@@ -68,5 +68,6 @@ export default {
 <style scoped>
 .tab-bar {
   z-index: 9;
+  height: 49px;
 }
 </style>

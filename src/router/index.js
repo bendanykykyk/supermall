@@ -19,8 +19,8 @@ const routes = [
   { path: "/detail", name: "Detail", component: Detail }
 ];
 export default new VueRouter({
-  routes,
-  mode: "history"
+  routes
+  // mode: "history"
 });
 
 const originalPush = VueRouter.prototype.push;
